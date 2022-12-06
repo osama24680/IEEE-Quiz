@@ -1,0 +1,13 @@
+1-intermediate value is not iterable => can't make the spread iterator because array has only one element => so check the length first
+2-don't update directly in the set state => it will be delayed by one step 
+3-useEffect should have setState => so it can execute  the render again
+
+
+
+
+
+
+
+1-intermediate value
+2-uestion with only one answer
+

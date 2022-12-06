@@ -1,0 +1,94 @@
+.settings_board {
+  width: 70vw;
+  height: 80vh;
+  background: rgba(250, 250, 254, 0);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(1.5px);
+  -webkit-backdrop-filter: blur(1.5px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  position: relative;
+  padding: 20px;
+}
+
+.settings_board h1 {
+  font-weight: bold;
+  color: #1e45e0;
+  font-size: 42px;
+  text-align: center;
+}
+
+.settings_board .categories {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings_board .categories label {
+  font-size: 25px;
+  color: #1e45e0;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.settings_board .categories select {
+  padding: 10px;
+  border: 2px solid #fff;
+  color: #0e294c;
+  font-size: 18px;
+  border-radius: 10px;
+  background-color: #fdfdfd9e;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  outline: none;
+  appearance: none;
+}
+
+.settings_board .categories select option {
+  border: 2px solid #fff;
+}
+
+.settings_board .difficulty {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings_board .difficulty .label_difficulty {
+  font-size: 25px;
+  color: #1e45e0;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.settings_board .difficulty div {
+  margin-bottom: 10px;
+  color: #0e294c;
+  font-size: 18px;
+}
+
+.settings_board .difficulty div input {
+  margin-right: 8px;
+}
+
+.settings_board .numberOfQuestions {
+  margin-top: 20px;
+}
+
+.settings_board .numberOfQuestions input {
+  padding: 10px;
+  border: 2px solid #fff;
+  color: #0e294c;
+  font-size: 18px;
+  border-radius: 10px;
+  background-color: #fdfdfd9e;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  outline: none;
+  appearance: none;
+  width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none;
+  margin: 0;
+}
