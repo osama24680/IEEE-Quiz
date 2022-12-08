@@ -1,97 +1,22 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import "./Home.scss"
-import { getQuestions } from "../Store/questionsSlice"
 import { useSelector, useDispatch } from 'react-redux'
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { getanswer, Logic, NextQuestion } from "../Store/questionsSlice"
+
 const Home = () => {
-    let navigate =useNavigate()
+    let navigate = useNavigate()
     let reduxData = useSelector(state => state.questions)
     let dispatch = useDispatch()
 
-    let [currentIndex, setCurrentIndex] = useState(0)
-    let [choosenAnswer, setChoosenAnswer] = useState("")
-    let [Score, setScore] = useState(0)
-    let [randomAnswers, setRandomAnswers] = useState([])
-    let [isSelected, setIsSelected] = useState(false)
-    let [isCorrect, setIsCorrect] = useState(null)
-    let [isWrong, setIsWrong] = useState(null)
-    let [greenChoice, setGreenChoice] = useState(null)
-
-
-    const logic = () => {
-        let answers
-        let shuffledAnswers = []
-
-        if (reduxData?.questions[currentIndex]?.incorrect_answers.length > 1) {
-            answers = [...reduxData?.questions[currentIndex]?.incorrect_answers, reduxData?.questions[currentIndex]?.correct_answer]
-            shuffledAnswers = answers.sort(() => Math.random() - 0.5)
-            setRandomAnswers(shuffledAnswers)
-
-        } else {
-            answers = [reduxData?.questions[currentIndex]?.incorrect_answers[0], reduxData?.questions[currentIndex]?.correct_answer]
-            shuffledAnswers = answers.sort(() => Math.random() - 0.5)
-            setRandomAnswers(shuffledAnswers)
-        }
-        console.log(reduxData?.questions[currentIndex]?.incorrect_answers)
-        console.log("correct_answer=>", reduxData?.questions[currentIndex]?.correct_answer)
-        console.log(shuffledAnswers)
-
-    }
-
-
-
-    function nextQuestion() {
-        let allAnswers = document.getElementById("allAnswers")
-        let BtnAllAnswers = allAnswers.getElementsByTagName("button")
-        Array.from(BtnAllAnswers).forEach(btn => {
-            return (
-                btn.style.color = "#0079ff",
-                btn.style.transform = "scale(1)",
-                btn.style.border = "2px solid #E9E8F6"
-            )
-        })
-
-
-        let index = currentIndex
-        index = index + 1
-        if (index < reduxData?.questions.length) {
-            setCurrentIndex(index)
-        } else {
-            navigate("/EndPage")
-        }
-        // logic()
-
-        setIsSelected(false)
-    }
-
-
-
-    function getanswer(e) {
-        let answer = e.target.textContent
-        setChoosenAnswer(answer)
-        if (reduxData?.questions[currentIndex].correct_answer === answer || Number(answer)) {
-            let newScore = Score;
-            newScore++;
-            setScore(newScore)
-
-            e.target.style.color = "green"
-            e.target.style.border = "2px solid green"
-        } else {
-            e.target.style.color = "red"
-            e.target.style.border = "2px solid red"
-            let rightAnswer = document.getElementById(`${reduxData?.questions[currentIndex].correct_answer}`)
-            rightAnswer.style.color = "green"
-            rightAnswer.style.border = "2px solid green"
-            rightAnswer.style.transform = "scale(1.1)"
-
-        }
-        setIsSelected(true)
-    }
 
     useEffect(() => {
 
-        logic()
-    }, [currentIndex, reduxData?.questions])
+        dispatch(Logic())
+        if(reduxData.lastQuestion){
+            navigate("/EndPage")
+        }
+    }, [reduxData?.currentIndex, reduxData?.questions, dispatch,navigate,reduxData?.lastQuestion])
     return (
 
         <>
@@ -105,24 +30,24 @@ const Home = () => {
                             <div className="questionsForm">
                                 <div className="question">
                                     {/* to remove . in the end of question */}
-                                    <p>{reduxData.loading ? "........" : reduxData.questions?.[currentIndex]?.question.slice(0, reduxData.questions?.[currentIndex]?.question.length - 1)} ?</p>
+                                    <p>{reduxData.loading ? "........" : reduxData.questions?.[reduxData.currentIndex]?.question.slice(0, reduxData.questions?.[reduxData.currentIndex]?.question.length - 1)} ?</p>
                                 </div>
                                 <div className="answers" id="allAnswers">
-                                    {randomAnswers?.map((item, index) => {
+                                    {reduxData.shuffledAnswers?.map((item, index) => {
                                         return (
-                                            <button disabled={isSelected} id={item} key={index} onClick={(e) => getanswer(e)}>{item}</button>
+                                            <button disabled={reduxData.isSelected} id={item} key={index} onClick={(e) => dispatch(getanswer(e))}>{item}</button>
                                         )
                                     })}
 
                                 </div>
                             </div>
                             <div className="question_number">
-                                <p>Question {currentIndex + 1} of {reduxData.questions.length}</p>
+                                <p>Question {reduxData.currentIndex + 1} of {reduxData.questions.length}</p>
                             </div>
                             <div className="finish_next">
                                 <button className="finish"><p>Finish</p></button>
-                                <button>{Score}</button>
-                                <button disabled={!isSelected} className={!isSelected && "disabled"} onClick={() => nextQuestion()}><p>Next</p></button>
+                                <button>{reduxData.Score}</button>
+                                <button disabled={!reduxData.isSelected} className={!reduxData.isSelected && "disabled"} onClick={() => dispatch(NextQuestion())}><p>Next</p></button>
                             </div>
                         </div>
                     )
